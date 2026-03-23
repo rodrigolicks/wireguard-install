@@ -7,6 +7,8 @@ RED='\033[0;31m'
 ORANGE='\033[0;33m'
 GREEN='\033[0;32m'
 NC='\033[0m'
+DEST_DIR='wireguard'
+
 
 function installPackages() {
 	if ! "$@"; then
@@ -109,6 +111,14 @@ function getHomeDirForClient() {
 	else
 		# if not SUDO_USER, use /root
 		HOME_DIR="/root"
+	fi
+
+	# If DEST_DIR is set, create and use the subdirectory
+	if [ -n "${DEST_DIR}" ]; then
+		HOME_DIR="${HOME_DIR}/${DEST_DIR}"
+		if [ ! -d "${HOME_DIR}" ]; then
+			mkdir -p "${HOME_DIR}"
+		fi
 	fi
 
 	echo "$HOME_DIR"
